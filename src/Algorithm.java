@@ -36,11 +36,11 @@ public class Algorithm {
         StringBuilder decompressed = new StringBuilder();
         int i = 0;
         while (i + 2 < text.length()) {
-            //is there a separator between current character, and it's number of repeating
+
+            //Is there a separator after the current character
             if (text.charAt(i + 1) != '±')
                 throw new IllegalArgumentException("Missing ± sign");
 
-            //skip ±
             int j = i + 2;
             StringBuilder number = new StringBuilder();
             while (j < text.length() && (text.charAt(j) >= '0' && text.charAt(j) <= '9')) {
@@ -48,17 +48,22 @@ public class Algorithm {
                 j++;
             }
 
-            //j didn't move -> there are no numbers of repeating for the current character
+            //j didn't move -> there are no numbers of repeating for the current character.
             if (j == i + 2)
                 throw new IllegalArgumentException("Unknown number of a character");
 
-            //If charAt(j) is ± and length of the number is 1 there is a character missing
-            //Either it's the character from the original text (before the separator sign)
-            //or the separator sign is missing (one separator represents the character from the original text
-            //and the other is for separating)
-            if(j < text.length() && text.charAt(j) == '±' && number.length() > 1) {
-                number.deleteCharAt(number.length() - 1);
-                j--;
+            /*
+                If it stopped because ± is encountered: Either ± is a part of the original text
+                or a digit is.
+                j < length of text -> check if the next character is the ±. If it is
+                ± is a part of the original text, otherwise digit is a part of the original text
+                and last digit from the number should be removed.
+             */
+            if(j < text.length() && text.charAt(j) == '±') {
+                if (j + 1 < text.length() && text.charAt(j + 1) != '±') {
+                    number.deleteCharAt(number.length() - 1);
+                    j--;
+                }
             }
 
             decompressed.append(String.valueOf(text.charAt(i))

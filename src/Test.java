@@ -31,17 +31,24 @@ public class Test {
             for (int i = 0; i < originalText.length; i++) {
 
                 String algorithmResult = Algorithm.compress(originalText[i]);
-                if (algorithmResult.equals(compressedText[i])) {
-                    out.println("Compression test case: " + originalText[i] +
-                            ": PASSED :" + "expected output: " + compressedText[i]
-                            + " : compression result: " + algorithmResult);
-                    passedCompressingTests++;
 
+                StringBuilder message = new StringBuilder();
+                message.append("Compression test case: ")
+                        .append(originalText[i]);
+
+                if (algorithmResult.equals(compressedText[i])) {
+                    message.append(": PASSED :");
+                    passedCompressingTests++;
                 } else {
-                    out.println("Compression test case: " + originalText[i] +
-                            ": FAILED :" + "expected output: " + compressedText[i]
-                            + " : compression result: " + algorithmResult);
+                    message.append(": FAILED :");
                 }
+
+                message.append("expected output: ")
+                        .append(compressedText[i])
+                        .append(" : compression result: ")
+                        .append(algorithmResult);
+
+                out.println(message);
             }
 
         } catch (IOException e) {
@@ -59,17 +66,25 @@ public class Test {
 
                 try {
                     String algorithmResult = Algorithm.decompress(compressedText[i]);
+
+                    StringBuilder message = new StringBuilder();
+                    message.append("Decompression test case: ")
+                            .append(compressedText[i]);
+
                     if (algorithmResult.equals(originalText[i])) {
-                        out.println("Decompression test case: " + compressedText[i] +
-                                ": PASSED :" + "expected output: " + originalText[i]
-                                + " : compression result: " + algorithmResult);
+                        message.append(": PASSED :");
                         passedDecompressingTests++;
 
                     } else {
-                        out.println("Decompression test case: " + compressedText[i] +
-                                ": FAILED :" + "expected output: " + originalText[i]
-                                + " : compression result: " + algorithmResult);
+                        message.append(": FAILED :");
                     }
+
+                    message.append("expected output: ")
+                            .append(originalText[i])
+                            .append(" : compression result: ")
+                            .append(algorithmResult);
+
+                    out.println(message);
 
                 } catch (IllegalArgumentException iae) {
                     out.println("Decompression test case: " + compressedText[i] +
@@ -100,11 +115,11 @@ public class Test {
         try (PrintWriter out = new PrintWriter(new FileWriter("TestReport.txt"))){
 
             String number = String.format("%d (%.2f%%)", passedCompressingTests,
-                    (float) (passedCompressingTests / originalText.length) * 100);
+                    (float) passedCompressingTests / originalText.length * 100);
             out.println("Compression tests passed: " + number);
 
             number = String.format("%d (%.2f%%)", passedDecompressingTests,
-                    (float) (passedDecompressingTests / (compressedText.length + wrongCompressionTest.length)) * 100);
+                    (float) passedDecompressingTests / (compressedText.length + wrongCompressionTest.length) * 100);
             out.println("Compression tests passed: " + number);
 
             out.println("Detailed report for each test in CompressionTest\\DecompressionTest file");
