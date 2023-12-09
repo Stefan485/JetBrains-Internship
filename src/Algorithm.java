@@ -66,11 +66,17 @@ public class Algorithm {
                 }
             }
 
+            /*Append substring to the text
+              number will never be empty or contain anything besides digits because
+              only digits can be added, and digit is removed only if
+            */
             decompressed.append(String.valueOf(text.charAt(i))
                     .repeat(Integer.parseInt(number.toString())));
 
             i = j;
         }
+
+        //If i didn't reach the end (i + 2 < text.length) -> something is missing
         if (i < text.length())
             throw new IllegalArgumentException("Missing one or more characters");
 
